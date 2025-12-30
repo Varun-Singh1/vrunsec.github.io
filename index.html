@@ -1,195 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>VrunSec | Information Security Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --bg-main: #0a0f1c;
+      --bg-card: #12182b;
+      --border: #1f2a44;
+      --text-main: #e6edf3;
+      --text-muted: #9aa4bf;
+      --accent: #00ffd5;
+      --accent-soft: #38bdf8;
+    }
+
+    body {
+      margin: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      background: radial-gradient(circle at top, #0e1530, #050712);
+      color: var(--text-main);
+      line-height: 1.75;
+    }
+
+    header {
+      padding: 100px 20px 80px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(0,255,213,0.07), transparent);
+    }
+
+    header h1 {
+      font-size: 3.5rem;
+      margin-bottom: 14px;
+      color: var(--accent);
+      letter-spacing: 2px;
+    }
+
+    header p {
+      max-width: 820px;
+      margin: auto;
+      font-size: 1.2rem;
+      color: var(--text-muted);
+    }
+
+    section {
+      max-width: 1100px;
+      margin: 70px auto;
+      padding: 0 24px;
+    }
+
+    h2 {
+      font-size: 1.6rem;
+      color: var(--accent);
+      margin-bottom: 30px;
+      border-left: 4px solid var(--accent);
+      padding-left: 14px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+      margin-bottom: 26px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul li {
+      margin-bottom: 12px;
+      color: var(--text-muted);
+    }
+
+    ul li::before {
+      content: "▸ ";
+      color: var(--accent);
+    }
+
+    a {
+      color: var(--accent-soft);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      padding: 50px 20px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      background: #050712;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+
+<body>
+
 <header>
   <h1>VrunSec</h1>
   <p>Information Security • Security Testing • Red Teaming • Learning in Public</p>
 </header>
 
 <section>
-  <h2>👨‍💻 About Me</h2>
-  <p>
-    I’m Varun Singh, an Information Security practitioner based in Indore with a strong
-    interest in security testing and red teaming. I focus on building deep technical
-    fundamentals through hands-on labs, real-world attack simulations, and continuous
-    self-learning.
-  </p>
-  <p>
-    This website serves as a public knowledge base documenting my technical notes,
-    certifications, personal handwritten learning material, and security write-ups —
-    created to support beginners as well as fellow security professionals.
-  </p>
+  <h2>👨‍💻 About</h2>
+  <div class="card">
+    <p>
+      I’m <strong>Varun Singh</strong>, an Information Security practitioner based in Indore
+      with a strong interest in security testing and red teaming.
+      I focus on building deep technical fundamentals through hands-on labs,
+      real-world attack simulations, and continuous self-learning.
+    </p>
+    <p>
+      This website serves as a public knowledge base documenting my technical notes,
+      certifications, personal handwritten learning material, and security write-ups —
+      created to support beginners as well as fellow security professionals.
+    </p>
+  </div>
 </section>
 
 <section>
   <h2>🛠 Skills & Technical Focus</h2>
-  <ul>
-    <li>Networking Fundamentals & TCP/IP</li>
-    <li>Windows Operating System (Client & Server)</li>
-    <li>Linux Operating System (Client & Server)</li>
-    <li>Web & Infrastructure Security Fundamentals</li>
-    <li>Web Application Security Testing (OWASP Top 10)</li>
-    <li>Network Security Testing</li>
-    <li>Reconnaissance & Vulnerability Analysis</li>
-    <li>Red Teaming & Adversary Simulation</li>
-    <li>Hands-on Labs: Hack The Box & TryHackMe</li>
-  </ul>
+  <div class="card">
+    <ul>
+      <li>Networking Fundamentals & TCP/IP</li>
+      <li>Windows & Linux Operating Systems (Client & Server)</li>
+      <li>Web & Infrastructure Security Fundamentals</li>
+      <li>Web Application & Network Security Testing</li>
+      <li>Reconnaissance & Vulnerability Analysis</li>
+      <li>Red Teaming & Adversary Simulation</li>
+      <li>Hands-on Labs: Hack The Box & TryHackMe</li>
+    </ul>
+  </div>
 </section>
 
 <section>
-  <h2>📚 Learning Resources & Personal Notes</h2>
-  <p>
-    Below are my personally created and maintained learning resources.
-    These notes are written during hands-on practice and are intended to
-    help learners build strong fundamentals in Information Security.
-  </p>
-
-  <ul>
-    <li>
-      <strong>Linux Operating System (Handwritten Notes)</strong><br>
-      Core Linux concepts, commands, internals, and security fundamentals<br>
-      🔗 <a href="https://github.com/Varun-Singh1/Linux-notes" target="_blank">
-        github.com/Varun-Singh1/Linux-notes
-      </a>
-    </li>
-
-    <li>
-      <strong>Linux Server Administration</strong><br>
-      Server configuration, services, administration, and security practices<br>
-      🔗 <a href="https://github.com/Varun-Singh1/Linux-Server" target="_blank">
-        github.com/Varun-Singh1/Linux-Server
-      </a>
-    </li>
-
-    <li>
-      <strong>Web Application Security Testing</strong><br>
-      Web vulnerabilities, testing methodology, and practical exploitation<br>
-      🔗 <a href="https://github.com/Varun-Singh1/Webpentest" target="_blank">
-        github.com/Varun-Singh1/Webpentest
-      </a>
-    </li>
-
-    <li>
-      <strong>Network Security Testing</strong><br>
-      Network enumeration, attacks, and exploitation techniques<br>
-      🔗 <a href="https://github.com/Varun-Singh1/Network-Pentesting" target="_blank">
-        github.com/Varun-Singh1/Network-Pentesting
-      </a>
-    </li>
-
-    <li>
-      <strong>Website Hosting & WordPress Security</strong><br>
-      Manual website hosting, WordPress setup, hardening, and security practices<br>
-      📩 <em>Personal handwritten notes available on request</em>
-    </li>
-  </ul>
-</section>
-
-<section>
-  <h2>🏅 Certifications & Achievements</h2>
-  <ul>
-    <li>
-      <strong>Armour Infosec Certified WordPress Security Expert (AICWSE)</strong><br>
-      Issued June 25, 2025
-    </li>
-    <li>
-      <strong>Armour Infosec Certified Linux Server Administrator (AICLSA)</strong><br>
-      Issued July 1, 2025
-    </li>
-    <li>
-      <strong>Armour Infosec Certified Windows Server Administrator (AICWSA)</strong><br>
-      Issued December 2, 2024
-    </li>
-  </ul>
+  <h2>🏅 Certifications</h2>
+  <div class="card">
+    <ul>
+      <li>Armour Infosec Certified WordPress Security Expert (AICWSE)</li>
+      <li>Armour Infosec Certified Linux Server Administrator (AICLSA)</li>
+      <li>Armour Infosec Certified Windows Server Administrator (AICWSA)</li>
+    </ul>
+  </div>
 </section>
 
 <section>
   <h2>📬 Contact</h2>
-  <ul>
-    <li>Email: <a href="mailto:vruncybersec@gmail.com">vruncybersec@gmail.com</a></li>
-    <li>GitHub: <a href="https://github.com/Varun-Singh1" target="_blank">
-      github.com/Varun-Singh1</a></li>
-    <li>LinkedIn: <a href="https://www.linkedin.com/in/varun-singh-chauhan" target="_blank">
-      linkedin.com/in/varun-singh-chauhan</a></li>
-  </ul>
-</section>
-
-<footer>
-  © 2025 VrunSec • Built with GitHub Pages • Information Security Portfolio
-</footer>
-  <h2>👨‍💻 About Me</h2>
-  <p>
-    I’m Varun Singh, an Information Security practitioner based in Indore with a strong interest in security testing.
-I focus on building deep technical fundamentals through hands-on labs, real-world attack simulations, and continuous self-learning.
-This website serves as a public knowledge base documenting my technical notes, certifications, personal handwritten learning material, and security write-ups — created to support beginners as well as fellow security professionals.
-  </p>
-</section>
-
-<section>
-  <h2>🛠 Skills & Technical Focus</h2>
-  <ul>
-    <li>Networking Fundamentals & TCP/IP</li>
-    <li>Windows Server Administration</li>
-    <li>Linux Server Administration</li>
-    <li>WordPress Security & Hardening</li>
-    <li>Web Security (OWASP Top 10)</li>
-    <li>Web Application Penetration Testing</li>
-    <li>Network Penetration Testing</li>
-    <li>Reconnaissance & Vulnerability Analysis</li>
-    <li>Red Teaming & Offensive Security Methodology</li>
-    <li>Hands-on Labs: Hack The Box & TryHackMe</li>
-  </ul>
-</section>
-
-<section>
-  <h2>📂 Learning & Hands-on Practice</h2>
-  <ul>
-    <li>Active practice in Web Application Penetration Testing</li>
-    <li>Participant in TryHackMe Advent of Cyber</li>
-    <li>Hack The Box Academy – Silver Annual Subscriber</li>
-    <li>Continuous lab-based learning and skill development</li>
-  </ul>
-</section>
-
-<section>
-  <h2>🏅 Certifications & Achievements</h2>
-  <ul>
-    <li>
-      <strong>Armour Infosec Certified WordPress Security Expert (AICWSE)</strong><br>
-      Issued June 25, 2025 –
-      <a href="https://certs.armourinfosec.com/aicwse/varun-singh-chauhan/" target="_blank">View Certificate</a>
-    </li>
-    <li>
-      <strong>Armour Infosec Certified Linux Server Administrator (AICLSA)</strong><br>
-      Issued July 1, 2025 –
-      <a href="https://certs.armourinfosec.com/aiclsa/varun-singh-chauhan/" target="_blank">View Certificate</a>
-    </li>
-    <li>
-      <strong>Armour Infosec Certified Windows Server Administrator (AICWSA)</strong><br>
-      Issued December 2, 2024 –
-      <a href="https://certs.armourinfosec.com/aicwsa/varun-singh-chauhan/" target="_blank">View Certificate</a>
-    </li>
-  </ul>
-</section>
-
-<section>
-  <h2>📬 Contact</h2>
-  <ul>
-    <li>Email: <a href="mailto:vruncybersec@gmail.com">vruncybersec@gmail.com</a></li>
-
-    <li>GitHub: 
-      <a href="https://github.com/Varun-Singh1" target="_blank">
-        github.com/Varun-Singh1
-      </a>
-    </li>
-
-    <li>LinkedIn:
-      <a href="https://www.linkedin.com/in/varun-singh-chauhan" target="_blank">
-        linkedin.com/in/varun-singh-chauhan
-      </a>
-    </li>
-  </ul>
-</section>
-
-
-  </ul>
+  <div class="card">
+    <ul>
+      <li>Email: <a href="mailto:vruncybersec@gmail.com">vruncybersec@gmail.com</a></li>
+      <li>GitHub: <a href="https://github.com/Varun-Singh1" target="_blank">github.com/Varun-Singh1</a></li>
+      <li>LinkedIn: <a href="https://www.linkedin.com/in/varun-singh-chauhan" target="_blank">linkedin.com/in/varun-singh-chauhan</a></li>
+    </ul>
+  </div>
 </section>
 
 <footer>
@@ -198,4 +170,3 @@ This website serves as a public knowledge base documenting my technical notes, c
 
 </body>
 </html>
-
