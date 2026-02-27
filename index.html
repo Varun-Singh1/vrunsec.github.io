@@ -1,67 +1,570 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
-  <title>VrunSec | Information Security Portfolio</title>
+  <title>VrunSec | Varun Singh — InfoSec Portfolio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <meta name="description" content="Varun Singh — Information Security practitioner. Red teaming, web app security, network pentesting. Portfolio, certs, and write-ups." />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
     :root {
-      --bg-main: #0a0f1c;
-      --bg-card: #12182b;
-      --border: #1f2a44;
-      --text-main: #e6edf3;
-      --text-muted: #9aa4bf;
-      --accent: #00ffd5;
-      --accent-soft: #38bdf8;
+      --bg: #030508; --bg2: #070c14; --bg3: #0b1120;
+      --panel: rgba(0,255,180,0.03);
+      --border: rgba(0,255,180,0.12); --border2: rgba(0,255,180,0.06);
+      --green: #00ffb3; --red: #ff3e3e; --blue: #38bdf8; --yellow: #ffc800;
+      --text: #c9d8e8; --muted: #4a6080; --muted2: #2a3a50;
+      --glow: 0 0 30px rgba(0,255,179,0.15); --glow2: 0 0 60px rgba(0,255,179,0.08);
+      --font-mono: 'Share Tech Mono', monospace;
+      --font-head: 'Rajdhani', sans-serif;
+      --font-code: 'Space Mono', monospace;
     }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
-      margin: 0;
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      background: radial-gradient(circle at top, #0e1530, #050712);
-      color: var(--text-main);
-      line-height: 1.75;
+      font-family: var(--font-head);
+      background: var(--bg); color: var(--text);
+      overflow-x: hidden; cursor: none; line-height: 1.7;
     }
 
-    header {
-      padding: 100px 20px 80px;
-      text-align: center;
-      border-bottom: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(0,255,213,0.07), transparent);
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.025) 2px, rgba(0,0,0,0.025) 4px);
+      pointer-events: none; z-index: 1000;
+    }
+    body::after {
+      content: ''; position: fixed; inset: 0;
+      background-image: linear-gradient(rgba(0,255,179,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,179,0.02) 1px, transparent 1px);
+      background-size: 60px 60px; pointer-events: none; z-index: 0;
     }
 
-    header h1 {
-      font-size: 3.5rem;
-      margin-bottom: 14px;
-      color: var(--accent);
-      letter-spacing: 2px;
+    .cursor {
+      width: 10px; height: 10px; background: var(--green); border-radius: 50%;
+      position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999;
+      box-shadow: 0 0 10px var(--green), 0 0 20px var(--green);
+    }
+    .cursor-ring {
+      width: 36px; height: 36px; border: 1px solid rgba(0,255,179,0.5); border-radius: 50%;
+      position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998;
+    }
+    .scroll-line {
+      position: fixed; top: 0; left: 0; height: 2px;
+      background: var(--green); z-index: 200; box-shadow: 0 0 8px var(--green);
     }
 
-    header p {
-      max-width: 820px;
-      margin: auto;
-      font-size: 1.2rem;
-      color: var(--text-muted);
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 48px;
+      background: rgba(3,5,8,0.9); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border2);
     }
+    .nav-logo { font-family: var(--font-mono); font-size: 1.05rem; color: var(--green); letter-spacing: 3px; text-decoration: none; }
+    .nav-logo span { color: var(--muted); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); text-decoration: none; letter-spacing: 2px; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--green); }
+    .nav-status { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.68rem; color: var(--muted); }
+    .status-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{ opacity:1; box-shadow:0 0 6px var(--green); } 50%{ opacity:0.4; box-shadow:none; } }
 
-    section {
-      max-width: 1100px;
-      margin: 70px auto;
-      padding: 0 24px;
+    .btn {
+      font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 2px;
+      padding: 12px 24px; border-radius: 2px; cursor: none; text-decoration: none;
+      transition: all 0.2s; display: inline-block;
     }
+    .btn-primary { background: var(--green); color: #000; border: 1px solid var(--green); }
+    .btn-primary:hover { background: transparent; color: var(--green); box-shadow: var(--glow); }
+    .btn-outline { background: transparent; color: var(--green); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: var(--green); box-shadow: var(--glow); }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border2); }
+    .btn-ghost:hover { color: var(--text); border-color: var(--border); }
 
-    h2 {
-      font-size: 1.6rem;
-      color: var(--accent);
-      margin-bottom: 30px;
-      border-left: 4px solid var(--accent);
-      padding-left: 14px;
+    .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 56px; }
+    .section-num { font-family: var(--font-mono); font-size: 0.68rem; color: var(--green); letter-spacing: 3px; }
+    .section-title { font-family: var(--font-head); font-size: 2.4rem; font-weight: 700; color: var(--text); letter-spacing: 1px; }
+    .section-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
+
+    .tag { font-family: var(--font-mono); font-size: 0.6rem; padding: 3px 8px; border: 1px solid var(--border2); color: var(--muted); border-radius: 2px; letter-spacing: 1px; }
+    .tag-green { border-color: rgba(0,255,179,0.25); color: var(--green); background: rgba(0,255,179,0.06); }
+    .tag-red { border-color: rgba(255,62,62,0.25); color: var(--red); background: rgba(255,62,62,0.06); }
+    .tag-blue { border-color: rgba(56,189,248,0.25); color: var(--blue); background: rgba(56,189,248,0.06); }
+
+    .full-divider { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); position: relative; z-index: 1; }
+
+    footer { position: relative; z-index: 1; text-align: center; padding: 48px 40px; border-top: 1px solid var(--border2); }
+    .footer-logo { font-family: var(--font-mono); font-size: 1.1rem; color: var(--green); letter-spacing: 4px; margin-bottom: 10px; }
+    .footer-text { font-family: var(--font-mono); font-size: 0.68rem; color: var(--muted); letter-spacing: 2px; }
+
+    /* HERO */
+    #hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 130px 60px 80px; position: relative; z-index: 1; }
+    .hero-tag { font-family: var(--font-mono); font-size: 0.72rem; color: var(--green); letter-spacing: 4px; margin-bottom: 20px; opacity: 0; animation: fadeUp 0.7s 0.2s forwards; }
+    .hero-name { font-family: var(--font-head); font-size: clamp(4rem,10vw,9rem); font-weight: 700; line-height: 0.9; letter-spacing: -2px; opacity: 0; animation: fadeUp 0.7s 0.4s forwards; }
+    .hero-name .l1 { display: block; color: var(--text); }
+    .hero-name .l2 { display: block; color: var(--green); text-shadow: 0 0 40px rgba(0,255,179,0.35); }
+    .hero-role { font-family: var(--font-mono); font-size: 0.95rem; color: var(--muted); margin-top: 22px; letter-spacing: 2px; opacity: 0; animation: fadeUp 0.7s 0.6s forwards; }
+    #typingText { color: var(--blue); border-right: 2px solid var(--blue); animation: blink 1s infinite; }
+    .hero-desc { max-width: 540px; font-size: 1.05rem; color: var(--muted); line-height: 1.9; margin-top: 24px; opacity: 0; animation: fadeUp 0.7s 0.8s forwards; }
+    .hero-ctas { display: flex; gap: 14px; margin-top: 36px; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.7s 1s forwards; }
+
+    .hero-terminal { position: absolute; right: 60px; top: 50%; transform: translateY(-50%); width: 410px; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; box-shadow: var(--glow2); opacity: 0; animation: fadeIn 1s 1.2s forwards; }
+    .t-bar { background: var(--bg3); padding: 10px 16px; display: flex; align-items: center; gap: 7px; border-bottom: 1px solid var(--border2); }
+    .t-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .t-dot.r { background: #ff5f57; } .t-dot.y { background: #febc2e; } .t-dot.g { background: #28c840; }
+    .t-title { font-family: var(--font-mono); font-size: 0.68rem; color: var(--muted); margin-left: 6px; }
+    .t-body { padding: 18px 20px; font-family: var(--font-mono); font-size: 0.72rem; line-height: 2; }
+    .t-p { color: var(--green); } .t-c { color: var(--text); }
+    .t-o { color: var(--muted); display: block; padding-left: 14px; }
+    .t-o.g { color: var(--green); } .t-o.b { color: var(--blue); }
+    .t-br { display: block; height: 6px; }
+
+    /* SKILLS */
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px,1fr)); gap: 14px; }
+    .skill-card { background: var(--panel); border: 1px solid var(--border2); border-left: 3px solid transparent; border-radius: 4px; padding: 24px; transition: all 0.3s; }
+    .skill-card:hover { border-color: rgba(0,255,179,0.2); border-left-color: var(--green); box-shadow: var(--glow2); transform: translateY(-2px); }
+    .skill-name { font-family: var(--font-head); font-size: 1.05rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .skill-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.65; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+
+    /* REPOS */
+    .repos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px,1fr)); gap: 18px; }
+    .repo-card { background: var(--panel); border: 1px solid var(--border2); border-left: 3px solid transparent; border-radius: 4px; padding: 26px; transition: all 0.3s; }
+    .repo-card:hover { border-color: rgba(0,255,179,0.2); border-left-color: var(--green); box-shadow: var(--glow2); }
+    .repo-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+    .repo-name { font-family: var(--font-code); font-size: 0.85rem; color: var(--blue); text-decoration: none; transition: color 0.2s; }
+    .repo-name:hover { color: var(--green); }
+    .repo-badge { font-family: var(--font-mono); font-size: 0.58rem; padding: 3px 8px; border-radius: 2px; letter-spacing: 1px; }
+    .b-live { background: rgba(0,255,179,0.08); color: var(--green); border: 1px solid rgba(0,255,179,0.2); }
+    .b-req  { background: rgba(56,189,248,0.08); color: var(--blue); border: 1px solid rgba(56,189,248,0.2); }
+    .repo-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.7; margin-bottom: 14px; }
+
+    /* CERTS */
+    .certs-list { display: flex; flex-direction: column; gap: 14px; }
+    .cert-card { background: var(--panel); border: 1px solid var(--border2); border-left: 3px solid transparent; border-radius: 4px; padding: 22px 26px; display: flex; align-items: center; gap: 22px; transition: all 0.3s; }
+    .cert-card:hover { border-left-color: var(--green); border-color: rgba(0,255,179,0.2); box-shadow: var(--glow2); }
+    .cert-info { flex: 1; }
+    .cert-name { font-family: var(--font-head); font-size: 1.05rem; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .cert-meta { font-family: var(--font-mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 1px; }
+    .cert-link { font-family: var(--font-mono); font-size: 0.68rem; color: var(--green); text-decoration: none; letter-spacing: 1px; border: 1px solid var(--border); padding: 7px 14px; border-radius: 2px; transition: all 0.2s; white-space: nowrap; }
+    .cert-link:hover { border-color: var(--green); box-shadow: var(--glow); }
+
+    /* BLOG PREVIEW */
+    .blog-preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 18px; }
+    .bp-card { background: var(--panel); border: 1px solid var(--border2); border-radius: 4px; overflow: hidden; transition: all 0.3s; }
+    .bp-card:hover { border-color: rgba(0,255,179,0.2); box-shadow: var(--glow2); transform: translateY(-3px); }
+    .bp-top { height: 140px; background: var(--bg3); border-bottom: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .bp-top-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(0,255,179,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,179,0.04) 1px, transparent 1px); background-size: 18px 18px; }
+    .bp-top-label { font-family: var(--font-mono); font-size: 1.8rem; font-weight: 700; color: rgba(0,255,179,0.15); letter-spacing: 4px; position: relative; z-index: 1; }
+    .bp-cat { position: absolute; top: 10px; left: 10px; font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 2px; padding: 3px 9px; border-radius: 2px; }
+    .cat-ctf   { background: rgba(255,200,0,0.12);  color: var(--yellow); border: 1px solid rgba(255,200,0,0.25); }
+    .cat-web   { background: rgba(255,62,62,0.1);   color: var(--red);    border: 1px solid rgba(255,62,62,0.2); }
+    .cat-linux { background: rgba(0,255,179,0.08);  color: var(--green);  border: 1px solid rgba(0,255,179,0.2); }
+    .bp-body { padding: 20px; }
+    .bp-meta { font-family: var(--font-mono); font-size: 0.62rem; color: var(--muted); letter-spacing: 1px; margin-bottom: 8px; }
+    .bp-title { font-family: var(--font-head); font-size: 1.1rem; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 8px; }
+    .bp-excerpt { font-size: 0.86rem; color: var(--muted); line-height: 1.65; margin-bottom: 14px; }
+    .bp-foot { display: flex; justify-content: space-between; align-items: center; }
+    .bp-link { font-family: var(--font-mono); font-size: 0.68rem; color: var(--green); text-decoration: none; letter-spacing: 1px; }
+    .bp-link:hover { text-decoration: underline; }
+    .bp-time { font-family: var(--font-mono); font-size: 0.62rem; color: var(--muted2); }
+
+    /* CONTACT */
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+    .contact-link { display: flex; align-items: center; gap: 16px; text-decoration: none; padding: 15px 20px; border: 1px solid var(--border2); border-left: 3px solid transparent; border-radius: 4px; transition: all 0.2s; background: var(--panel); margin-bottom: 12px; }
+    .contact-link:hover { border-left-color: var(--green); border-color: rgba(0,255,179,0.2); box-shadow: var(--glow2); }
+    .cl-text { font-family: var(--font-mono); font-size: 0.72rem; color: var(--blue); letter-spacing: 1px; }
+    .cl-label { font-family: var(--font-mono); font-size: 0.62rem; color: var(--muted); margin-left: auto; letter-spacing: 1px; }
+
+    /* STATS */
+    .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+    .stat-card { background: var(--panel); border: 1px solid var(--border2); border-radius: 4px; padding: 20px; text-align: center; }
+    .stat-val { font-family: var(--font-mono); font-size: 1.8rem; font-weight: 700; }
+    .stat-lbl { font-family: var(--font-mono); font-size: 0.6rem; color: var(--muted); letter-spacing: 2px; margin-top: 4px; }
+    .text-green { color: var(--green); } .text-red { color: var(--red); }
+
+    .sec { position: relative; z-index: 1; padding: 90px 60px; max-width: 1260px; margin: 0 auto; }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    @keyframes blink  { 0%,100%{border-color:var(--blue)} 50%{border-color:transparent} }
+
+    @media (max-width:900px) {
+      nav { padding: 14px 20px; } .nav-links { display: none; }
+      #hero { padding: 110px 24px 60px; } .hero-terminal { display: none; }
+      .sec { padding: 65px 24px; }
+      .contact-grid { grid-template-columns: 1fr; gap: 32px; }
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
     }
+  </style>
+</head>
+<body>
 
-    .card {
-      background: rgba(255,255,255,0.03);
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="scroll-line" id="scrollLine"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">VRUN<span>//</span>SEC</a>
+  <ul class="nav-links">
+    <li><a href="#about">ABOUT</a></li>
+    <li><a href="#skills">SKILLS</a></li>
+    <li><a href="#repos">REPOS</a></li>
+    <li><a href="#certs">CERTS</a></li>
+    <li><a href="blog/index.html">BLOG</a></li>
+    <li><a href="#contact">CONTACT</a></li>
+  </ul>
+  <div class="nav-status"><div class="status-dot"></div>AVAILABLE</div>
+</nav>
+
+<section id="hero">
+  <div style="max-width:680px;">
+    <div class="hero-tag">// INFORMATION SECURITY PRACTITIONER — INDORE, IN</div>
+    <h1 class="hero-name">
+      <span class="l1">VARUN</span>
+      <span class="l2">SINGH</span>
+    </h1>
+    <div class="hero-role">$ whoami — <span id="typingText">Red Teamer</span></div>
+    <p class="hero-desc">Security practitioner building deep offensive skills through adversary simulations, hands-on labs, and real-world attack research. Documenting everything — for the community.</p>
+    <div class="hero-ctas">
+      <a href="#repos" class="btn btn-primary">VIEW REPOS</a>
+      <a href="blog/index.html" class="btn btn-outline">READ BLOG</a>
+      <a href="#contact" class="btn btn-ghost">CONTACT</a>
+    </div>
+  </div>
+  <div class="hero-terminal">
+    <div class="t-bar">
+      <div class="t-dot r"></div><div class="t-dot y"></div><div class="t-dot g"></div>
+      <span class="t-title">varun@kali:~$</span>
+    </div>
+    <div class="t-body">
+      <span><span class="t-p">varun@kali:~$</span> <span class="t-c">cat whoami.txt</span></span>
+      <span class="t-o g">[ OK ] Loading...</span>
+      <span class="t-o">Name     : Varun Singh Chauhan</span>
+      <span class="t-o">Location : Indore, India</span>
+      <span class="t-o b">Focus    : Red Team · Web · Network</span>
+      <span class="t-o">Platform : HTB · TryHackMe</span>
+      <span class="t-br"></span>
+      <span><span class="t-p">varun@kali:~$</span> <span class="t-c">ls certs/</span></span>
+      <span class="t-o g">THM_AdventOfCyber.pdf</span>
+      <span class="t-o g">AICLSA_July2025.pdf</span>
+      <span class="t-o g">AICWSE_June2025.pdf</span>
+      <span class="t-o g">AICWSA_Dec2024.pdf</span>
+      <span class="t-br"></span>
+      <span><span class="t-p">varun@kali:~$</span> <span class="t-c">_</span></span>
+    </div>
+  </div>
+</section>
+
+<div class="full-divider"></div>
+
+<section class="sec" id="about">
+  <div class="section-header">
+    <span class="section-num">01 //</span>
+    <h2 class="section-title">ABOUT</h2>
+    <div class="section-line"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1.2fr 0.8fr;gap:60px;align-items:start;">
+    <div>
+      <p style="font-size:1.05rem;color:var(--muted);line-height:1.9;margin-bottom:18px;" data-fade>I'm an Information Security practitioner with a deep focus on offensive security — red team operations, web application testing, and network security assessments. I build skills through real-world simulations and continuous self-directed research.</p>
+      <p style="font-size:1rem;color:var(--muted);line-height:1.9;" data-fade>This site is my public knowledge base: raw lab notes, CTF write-ups, cert docs, and blog posts — covering everything from Linux internals to Active Directory attacks. Built to help beginners and fellow practitioners alike.</p>
+    </div>
+    <div class="stats-grid" data-fade>
+      <div class="stat-card"><div class="stat-val text-green">4+</div><div class="stat-lbl">CERTS</div></div>
+      <div class="stat-card"><div class="stat-val" style="color:var(--blue);">HTB</div><div class="stat-lbl">HACK THE BOX</div></div>
+      <div class="stat-card"><div class="stat-val" style="color:var(--blue);">THM</div><div class="stat-lbl">TRYHACKME</div></div>
+      <div class="stat-card"><div class="stat-val text-red">RED</div><div class="stat-lbl">TEAM FOCUS</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="full-divider"></div>
+
+<section class="sec" id="skills">
+  <div class="section-header">
+    <span class="section-num">02 //</span>
+    <h2 class="section-title">SKILLS</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card" data-fade>
+      <div class="skill-name">Web App Security</div>
+      <div class="skill-desc">OWASP Top 10, manual testing methodology, exploitation and report writing.</div>
+      <div class="skill-tags"><span class="tag tag-red">BURP SUITE</span><span class="tag">OWASP</span><span class="tag">SQLi</span><span class="tag">XSS</span></div>
+    </div>
+    <div class="skill-card" data-fade>
+      <div class="skill-name">Red Teaming</div>
+      <div class="skill-desc">Adversary simulation, attack chain development, evasion, lateral movement.</div>
+      <div class="skill-tags"><span class="tag tag-red">MITRE ATT&amp;CK</span><span class="tag">C2</span><span class="tag">EVASION</span></div>
+    </div>
+    <div class="skill-card" data-fade>
+      <div class="skill-name">Network Pentesting</div>
+      <div class="skill-desc">Recon, enumeration, protocol attacks, exploitation on internal/external networks.</div>
+      <div class="skill-tags"><span class="tag tag-blue">NMAP</span><span class="tag">WIRESHARK</span><span class="tag">TCP/IP</span></div>
+    </div>
+    <div class="skill-card" data-fade>
+      <div class="skill-name">Linux Systems</div>
+      <div class="skill-desc">Deep internals, server admin, privilege escalation paths, hardening.</div>
+      <div class="skill-tags"><span class="tag tag-green">BASH</span><span class="tag">PRIVESC</span><span class="tag">SYSTEMD</span></div>
+    </div>
+    <div class="skill-card" data-fade>
+      <div class="skill-name">Windows & Active Directory</div>
+      <div class="skill-desc">AD architecture, domain attacks — Kerberoasting, pass-the-hash, misconfigs.</div>
+      <div class="skill-tags"><span class="tag tag-blue">AD</span><span class="tag">KERBEROS</span><span class="tag">LDAP</span></div>
+    </div>
+    <div class="skill-card" data-fade>
+      <div class="skill-name">OSINT & Recon</div>
+      <div class="skill-desc">Passive/active recon, attack surface mapping, target profiling.</div>
+      <div class="skill-tags"><span class="tag">SHODAN</span><span class="tag">OSINT</span><span class="tag">RECON-NG</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="full-divider"></div>
+
+<section class="sec" id="repos">
+  <div class="section-header">
+    <span class="section-num">03 //</span>
+    <h2 class="section-title">KNOWLEDGE REPOS</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="repos-grid">
+    <div class="repo-card" data-fade>
+      <div class="repo-header">
+        <a href="https://github.com/Varun-Singh1/Webpentest" target="_blank" rel="noopener" class="repo-name">Webpentest</a>
+        <span class="repo-badge b-live">PUBLIC</span>
+      </div>
+      <div class="repo-desc">OWASP Top 10, exploitation techniques, and testing methodology for web application security assessments.</div>
+      <div class="skill-tags"><span class="tag tag-red">WEB</span><span class="tag">OWASP</span><span class="tag">EXPLOITATION</span></div>
+    </div>
+    <div class="repo-card" data-fade>
+      <div class="repo-header">
+        <a href="https://github.com/Varun-Singh1/Network-Pentesting" target="_blank" rel="noopener" class="repo-name">Network-Pentesting</a>
+        <span class="repo-badge b-live">PUBLIC</span>
+      </div>
+      <div class="repo-desc">Recon, enumeration, protocol attacks and exploitation during real-world network security assessments.</div>
+      <div class="skill-tags"><span class="tag tag-blue">NETWORK</span><span class="tag">RECON</span><span class="tag">ENUM</span></div>
+    </div>
+    <div class="repo-card" data-fade>
+      <div class="repo-header">
+        <a href="https://github.com/Varun-Singh1/Linux-notes" target="_blank" rel="noopener" class="repo-name">Linux-notes</a>
+        <span class="repo-badge b-live">PUBLIC</span>
+      </div>
+      <div class="repo-desc">Linux fundamentals to advanced — CLI, file systems, permissions, processes, and system internals for security work.</div>
+      <div class="skill-tags"><span class="tag tag-green">LINUX</span><span class="tag">CLI</span><span class="tag">INTERNALS</span></div>
+    </div>
+    <div class="repo-card" data-fade>
+      <div class="repo-header">
+        <a href="https://github.com/Varun-Singh1/Linux-Server" target="_blank" rel="noopener" class="repo-name">Linux-Server</a>
+        <span class="repo-badge b-live">PUBLIC</span>
+      </div>
+      <div class="repo-desc">Linux server setup, service config, and administration with focus on security implications and misconfigurations.</div>
+      <div class="skill-tags"><span class="tag tag-green">SERVER</span><span class="tag">SERVICES</span><span class="tag">HARDENING</span></div>
+    </div>
+    <div class="repo-card" data-fade>
+      <div class="repo-header">
+        <span class="repo-name" style="cursor:default;color:var(--muted);">Networking-Notes</span>
+        <span class="repo-badge b-req">ON REQUEST</span>
+      </div>
+      <div class="repo-desc">Networking from beginner to advanced — TCP/IP, protocols, services, DNS, and security-relevant attack surfaces.</div>
+      <div class="skill-tags"><span class="tag">TCP/IP</span><span class="tag">PROTOCOLS</span><span class="tag">DNS</span></div>
+    </div>
+    <div class="repo-card" data-fade>
+      <div class="repo-header">
+        <span class="repo-name" style="cursor:default;color:var(--muted);">Windows-Notes</span>
+        <span class="repo-badge b-req">ON REQUEST</span>
+      </div>
+      <div class="repo-desc">Windows client & server — architecture, Active Directory, user management, permissions, and enterprise attack paths.</div>
+      <div class="skill-tags"><span class="tag tag-blue">WINDOWS</span><span class="tag">AD</span><span class="tag">ENTERPRISE</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="full-divider"></div>
+
+<section class="sec" id="certs">
+  <div class="section-header">
+    <span class="section-num">04 //</span>
+    <h2 class="section-title">CERTIFICATIONS</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="certs-list">
+    <div class="cert-card" data-fade>
+      <div class="cert-info">
+        <div class="cert-name">TryHackMe — Advent of Cyber</div>
+        <div class="cert-meta">TRYHACKME · WEB · CLOUD · MALWARE · DEFENSIVE SECURITY</div>
+      </div>
+      <a href="https://tryhackme-certificates.s3-eu-west-1.amazonaws.com/THM-5GX6KR6INK.pdf" target="_blank" rel="noopener" class="cert-link">VERIFY ↗</a>
+    </div>
+    <div class="cert-card" data-fade>
+      <div class="cert-info">
+        <div class="cert-name">AICLSA — Certified Linux Server Administrator</div>
+        <div class="cert-meta">ARMOUR INFOSEC · ISSUED JULY 1, 2025</div>
+      </div>
+      <a href="https://certs.armourinfosec.com/aiclsa/varun-singh-chauhan/" target="_blank" rel="noopener" class="cert-link">VERIFY ↗</a>
+    </div>
+    <div class="cert-card" data-fade>
+      <div class="cert-info">
+        <div class="cert-name">AICWSE — Certified WordPress Security Expert</div>
+        <div class="cert-meta">ARMOUR INFOSEC · ISSUED JUNE 25, 2025</div>
+      </div>
+      <a href="https://certs.armourinfosec.com/aicwse/varun-singh-chauhan/" target="_blank" rel="noopener" class="cert-link">VERIFY ↗</a>
+    </div>
+    <div class="cert-card" data-fade>
+      <div class="cert-info">
+        <div class="cert-name">AICWSA — Certified Windows Server Administrator</div>
+        <div class="cert-meta">ARMOUR INFOSEC · ISSUED DECEMBER 2, 2024</div>
+      </div>
+      <a href="https://certs.armourinfosec.com/aicwsa/varun-singh-chauhan/" target="_blank" rel="noopener" class="cert-link">VERIFY ↗</a>
+    </div>
+  </div>
+</section>
+
+<div class="full-divider"></div>
+
+<section class="sec" id="blog-preview">
+  <div class="section-header">
+    <span class="section-num">05 //</span>
+    <h2 class="section-title">LATEST POSTS</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="blog-preview-grid">
+    <div class="bp-card" data-fade>
+      <div class="bp-top">
+        <div class="bp-top-grid"></div>
+        <div class="bp-top-label">CTF</div>
+        <span class="bp-cat cat-ctf">CTF WRITE-UP</span>
+      </div>
+      <div class="bp-body">
+        <div class="bp-meta">PUBLISHED · 8 MIN READ</div>
+        <div class="bp-title">GeoGuesser CTF — OSINT Geolocation Challenge Write-up</div>
+        <div class="bp-excerpt">How I solved a geolocation-based CTF challenge using image analysis, metadata, and open-source intelligence techniques.</div>
+        <div class="bp-foot">
+          <a href="blog/geoguesser-ctf.html" class="bp-link">READ POST →</a>
+          <span class="bp-time">8 MIN</span>
+        </div>
+      </div>
+    </div>
+    <div class="bp-card" data-fade>
+      <div class="bp-top">
+        <div class="bp-top-grid"></div>
+        <div class="bp-top-label">WEB</div>
+        <span class="bp-cat cat-web">WEB SECURITY</span>
+      </div>
+      <div class="bp-body">
+        <div class="bp-meta">COMING SOON · 8 MIN READ</div>
+        <div class="bp-title">SQL Injection From Zero to Shell</div>
+        <div class="bp-excerpt">From basic payloads to blind SQLi and OS command execution — a practical walkthrough.</div>
+        <div class="bp-foot">
+          <span class="bp-link" style="color:var(--muted);cursor:default;">DRAFT IN PROGRESS</span>
+          <span class="bp-time">8 MIN</span>
+        </div>
+      </div>
+    </div>
+    <div class="bp-card" data-fade>
+      <div class="bp-top">
+        <div class="bp-top-grid"></div>
+        <div class="bp-top-label">LINUX</div>
+        <span class="bp-cat cat-linux">LINUX</span>
+      </div>
+      <div class="bp-body">
+        <div class="bp-meta">COMING SOON · 10 MIN READ</div>
+        <div class="bp-title">Linux Privilege Escalation — Common Paths</div>
+        <div class="bp-excerpt">SUID, cron jobs, writable paths, sudo misconfigs — hands-on privesc vectors.</div>
+        <div class="bp-foot">
+          <span class="bp-link" style="color:var(--muted);cursor:default;">DRAFT IN PROGRESS</span>
+          <span class="bp-time">10 MIN</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:28px;text-align:center;">
+    <a href="blog/index.html" class="btn btn-outline">VIEW ALL POSTS →</a>
+  </div>
+</section>
+
+<div class="full-divider"></div>
+
+<section class="sec" id="contact">
+  <div class="section-header">
+    <span class="section-num">06 //</span>
+    <h2 class="section-title">CONTACT</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="contact-grid">
+    <div data-fade>
+      <p style="font-size:1.05rem;color:var(--muted);line-height:1.9;margin-bottom:24px;">Open to collaborations, freelance security assessments, bug bounty partnerships, and connecting with fellow practitioners.</p>
+      <p style="font-family:var(--font-mono);font-size:0.78rem;color:var(--green);letter-spacing:2px;line-height:2.2;">// RESPONSE TIME : 24-48 HOURS<br>// AVAILABLE FOR : FREELANCE · COLLAB · MENTORSHIP</p>
+    </div>
+    <div data-fade>
+      <a href="mailto:vruncybersec@gmail.com" class="contact-link">
+        <span class="cl-text">vruncybersec@gmail.com</span><span class="cl-label">EMAIL</span>
+      </a>
+      <a href="https://github.com/Varun-Singh1" target="_blank" rel="noopener" class="contact-link">
+        <span class="cl-text">github.com/Varun-Singh1</span><span class="cl-label">GITHUB</span>
+      </a>
+      <a href="https://www.linkedin.com/in/varun-singh-chauhan" target="_blank" rel="noopener" class="contact-link">
+        <span class="cl-text">linkedin.com/in/varun-singh-chauhan</span><span class="cl-label">LINKEDIN</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">VRUNSEC</div>
+  <div class="footer-text">© 2025 VARUN SINGH CHAUHAN · INFORMATION SECURITY PORTFOLIO · BUILT WITH GITHUB PAGES</div>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    cursor.style.transform=`translate(${mx-5}px,${my-5}px)`;
+  });
+  (function animRing(){
+    rx+=(mx-rx-18)*0.15; ry+=(my-ry-18)*0.15;
+    ring.style.transform=`translate(${rx}px,${ry}px)`;
+    requestAnimationFrame(animRing);
+  })();
+
+  window.addEventListener('scroll',()=>{
+    const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+    document.getElementById('scrollLine').style.width=p+'%';
+  });
+
+  const roles=['Red Teamer','Penetration Tester','Security Researcher','CTF Player','Linux Enthusiast'];
+  let ri=0,ci=0,del=false;
+  const el=document.getElementById('typingText');
+  function type(){
+    const w=roles[ri];
+    if(!del){el.textContent=w.slice(0,++ci);if(ci===w.length){del=true;setTimeout(type,1900);return;}}
+    else{el.textContent=w.slice(0,--ci);if(ci===0){del=false;ri=(ri+1)%roles.length;}}
+    setTimeout(type,del?55:100);
+  }
+  type();
+
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach((e,i)=>{
+      if(e.isIntersecting){
+        setTimeout(()=>{e.target.style.opacity='1';e.target.style.transform='translateY(0)';},i*60);
+        obs.unobserve(e.target);
+      }
+    });
+  },{threshold:0.08});
+  document.querySelectorAll('[data-fade]').forEach(el=>{
+    el.style.opacity='0';el.style.transform='translateY(24px)';
+    el.style.transition='opacity 0.55s ease,transform 0.55s ease';
+    obs.observe(el);
+  });
+</script>
+</body>
+</html>      background: rgba(255,255,255,0.03);
       border: 1px solid var(--border);
       border-radius: 14px;
       padding: 28px;
