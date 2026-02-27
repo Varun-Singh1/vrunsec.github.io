@@ -1,1 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Blog & Write-ups | VrunSec</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Security write-ups, CTF solutions, and technical blog posts by Varun Singh — VrunSec." />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="X-Frame-Options" content="DENY" />
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 
+    :root {
+      --bg: #030508; --bg2: #070c14; --bg3: #0b1120;
+      --panel: rgba(0,255,180,0.03);
+      --border: rgba(0,255,180,0.12); --border2: rgba(0,255,180,0.06);
+      --green: #00ffb3; --red: #ff3e3e; --blue: #38bdf8; --yellow: #ffc800;
+      --text: #c9d8e8; --muted: #4a6080; --muted2: #2a3a50;
+      --glow: 0 0 30px rgba(0,255,179,0.15); --glow2: 0 0 60px rgba(0,255,179,0.08);
+      --font-mono: 'Share Tech Mono', monospace;
+      --font-head: 'Rajdhani', sans-serif;
+      --font-code: 'Space Mono', monospace;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-head);
+      background: var(--bg); color: var(--text);
+      overflow-x: hidden; cursor: none; line-height: 1.7;
+    }
+
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.025) 2px, rgba(0,0,0,0.025) 4px);
+      pointer-events: none; z-index: 1000;
+    }
+    body::after {
+      content: ''; position: fixed; inset: 0;
+      background-image: linear-gradient(rgba(0,255,179,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,179,0.02) 1px, transparent 1px);
+      background-size: 60px 60px; pointer-events: none; z-index: 0;
+    }
+
+    .cursor {
+      width: 10px; height: 10px; background: var(--green); border-radius: 50%;
+      position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999;
+      box-shadow: 0 0 10px var(--green), 0 0 20px var(--green);
+    }
+    .cursor-ring {
+      width: 36px; height: 36px; border: 1px solid rgba(0,255,179,0.5); border-radius: 50%;
+      position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998;
+    }
+    .scroll-line {
+      position: fixed; top: 0; left: 0; height: 2px;
+      background: var(--green); z-index: 200; box-shadow: 0 0 8px var(--green);
+    }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 16px 48px;
+      background: rgba(3,5,8,0.9); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border2);
+    }
+    .nav-logo { font-family: var(--font-mono); font-size: 1.05rem; color: var(--green); letter-spacing: 3px; text-decoration: none; }
+    .nav-logo span { color: var(--muted); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); text-decoration: none; letter-spacing: 2px; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--green); }
+    .nav-links a.active::before { content: '> '; }
+    .nav-status { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.68rem; color: var(--muted); }
+    .status-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{ opacity:1; box-shadow:0 0 6px var(--green); } 50%{ opacity:0.4; box-shadow:none; } }
+
+    .btn { font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 2px; padding: 12px 24px; border-radius: 2px; cursor: none; text-decoration: none; transition: all 0.2s; display: inline-block; }
+    .btn-outline { background: transparent; color: var(--green); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: var(--green); box-shadow: var(--glow); }
+
+    .full-divider { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); position: relative; z-index: 1; }
+
+    footer { position: relative; z-index: 1; text-align: center; padding: 48px 40px; border-top: 1px solid var(--border2); }
+    .footer-logo { font-family: var(--font-mono); font-size: 1.1rem; color: var(--green); letter-spacing: 4px; margin-bottom: 10px; }
+    .footer-text { font-family: var(--font-mono); font-size: 0.68rem; color: var(--muted); letter-spacing: 2px; }
+    .footer-text a { color: var(--muted); text-decoration: none; }
+    .footer-text a:hover { color: var(--green); }
+
+    .tag { font-family: var(--font-mono); font-size: 0.6rem; padding: 3px 8px; border: 1px solid var(--border2); color: var(--muted); border-radius: 2px; letter-spacing: 1px; }
+    .tag-green { border-color: rgba(0,255,179,0.25); color: var(--green); background: rgba(0,255,179,0.06); }
+    .tag-red   { border-color: rgba(255,62,62,0.25);  color: var(--red);   background: rgba(255,62,62,0.06); }
+    .tag-blue  { border-color: rgba(56,189,248,0.25); color: var(--blue);  background: rgba(56,189,248,0.06); }
+
+    /* PAGE */
+    .page-wrap { position: relative; z-index: 1; padding: 130px 60px 80px; max-width: 1200px; margin: 0 auto; }
+
+    .page-hero { margin-bottom: 56px; }
+    .page-hero-tag { font-family: var(--font-mono); font-size: 0.7rem; color: var(--green); letter-spacing: 4px; margin-bottom: 14px; opacity:0; animation: fadeUp 0.6s 0.2s forwards; }
+    .page-hero-title { font-family: var(--font-head); font-size: clamp(2.8rem,6vw,5rem); font-weight: 700; color: var(--text); line-height: 1; margin-bottom: 16px; opacity:0; animation: fadeUp 0.6s 0.4s forwards; }
+    .page-hero-title span { color: var(--green); }
+    .page-hero-desc { font-size: 1rem; color: var(--muted); max-width: 560px; line-height: 1.8; opacity:0; animation: fadeUp 0.6s 0.6s forwards; }
+
+    /* STATS BAR */
+    .blog-stats {
+      display: flex; gap: 32px; flex-wrap: wrap;
+      margin-bottom: 40px; padding: 18px 26px;
+      background: var(--panel); border: 1px solid var(--border2); border-radius: 4px;
+      opacity:0; animation: fadeUp 0.6s 0.65s forwards;
+    }
+    .bs-item { font-family: var(--font-mono); font-size: 0.68rem; color: var(--muted); letter-spacing: 1px; }
+    .bs-item span { color: var(--green); margin-right: 6px; }
+
+    /* FILTER */
+    .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; opacity:0; animation: fadeUp 0.6s 0.7s forwards; }
+    .filter-btn {
+      font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 2px;
+      padding: 7px 16px; border-radius: 2px; cursor: none;
+      border: 1px solid var(--border2); background: transparent; color: var(--muted); transition: all 0.2s;
+    }
+    .filter-btn:hover, .filter-btn.active { border-color: var(--green); color: var(--green); background: rgba(0,255,179,0.05); }
+
+    /* BLOG GRID */
+    .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px,1fr)); gap: 22px; }
+
+    .post-card {
+      background: var(--panel); border: 1px solid var(--border2);
+      border-left: 3px solid transparent; border-radius: 4px;
+      overflow: hidden; transition: all 0.3s; text-decoration: none; display: block;
+    }
+    .post-card:hover { border-color: rgba(0,255,179,0.2); border-left-color: var(--green); box-shadow: var(--glow2); transform: translateY(-4px); }
+    .post-card.draft { opacity: 0.5; pointer-events: none; }
+
+    .post-thumb {
+      height: 150px; background: var(--bg3); border-bottom: 1px solid var(--border2);
+      position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .post-thumb-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(0,255,179,0.04) 1px,transparent 1px), linear-gradient(90deg,rgba(0,255,179,0.04) 1px,transparent 1px);
+      background-size: 20px 20px;
+    }
+    .post-thumb-label { font-family: var(--font-mono); font-size: 1.6rem; font-weight: 700; color: rgba(0,255,179,0.12); letter-spacing: 4px; position: relative; z-index: 1; }
+    .post-cat {
+      position: absolute; top: 10px; left: 10px;
+      font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 2px;
+      padding: 3px 9px; border-radius: 2px;
+    }
+    .post-status {
+      position: absolute; top: 10px; right: 10px;
+      font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 1px;
+      padding: 3px 8px; border-radius: 2px;
+    }
+    .status-pub   { background: rgba(0,255,179,0.1);  color: var(--green);  border: 1px solid rgba(0,255,179,0.25); }
+    .status-draft { background: rgba(74,96,128,0.12); color: var(--muted);  border: 1px solid var(--border2); }
+
+    .cat-ctf   { background:rgba(255,200,0,0.12); color:var(--yellow); border:1px solid rgba(255,200,0,0.25); }
+    .cat-web   { background:rgba(255,62,62,0.1);  color:var(--red);    border:1px solid rgba(255,62,62,0.2); }
+    .cat-net   { background:rgba(56,189,248,0.1); color:var(--blue);   border:1px solid rgba(56,189,248,0.2); }
+    .cat-linux { background:rgba(0,255,179,0.08); color:var(--green);  border:1px solid rgba(0,255,179,0.2); }
+    .cat-red   { background:rgba(255,62,62,0.1);  color:var(--red);    border:1px solid rgba(255,62,62,0.2); }
+    .cat-win   { background:rgba(56,189,248,0.1); color:var(--blue);   border:1px solid rgba(56,189,248,0.2); }
+
+    .post-body { padding: 22px; }
+    .post-meta { font-family: var(--font-mono); font-size: 0.62rem; color: var(--muted); letter-spacing: 1px; margin-bottom: 8px; }
+    .post-title { font-family: var(--font-head); font-size: 1.15rem; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 8px; }
+    .post-excerpt { font-size: 0.87rem; color: var(--muted); line-height: 1.65; margin-bottom: 14px; }
+    .post-footer { display: flex; justify-content: space-between; align-items: center; }
+    .post-readmore { font-family: var(--font-mono); font-size: 0.68rem; color: var(--green); letter-spacing: 1px; }
+    .post-time { font-family: var(--font-mono); font-size: 0.62rem; color: var(--muted2); }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+    @media(max-width:900px) {
+      nav { padding: 14px 20px; } .nav-links { display: none; }
+      .page-wrap { padding: 110px 24px 60px; }
+      .blog-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="scroll-line" id="scrollLine"></div>
+
+<nav>
+  <a href="../index.html" class="nav-logo">VRUN<span>//</span>SEC</a>
+  <ul class="nav-links">
+    <li><a href="../index.html#about">ABOUT</a></li>
+    <li><a href="../index.html#skills">SKILLS</a></li>
+    <li><a href="../index.html#repos">REPOS</a></li>
+    <li><a href="../index.html#certs">CERTS</a></li>
+    <li><a href="index.html" class="active">BLOG</a></li>
+    <li><a href="../index.html#contact">CONTACT</a></li>
+  </ul>
+  <div class="nav-status"><div class="status-dot"></div>AVAILABLE</div>
+</nav>
+
+<div class="page-wrap">
+
+  <div class="page-hero">
+    <div class="page-hero-tag">// WRITE-UPS · RESEARCH · NOTES</div>
+    <h1 class="page-hero-title">BLOG &<br><span>WRITE-UPS</span></h1>
+    <p class="page-hero-desc">CTF solutions, security research, lab notes, and technical write-ups. Raw, detailed, and built to help.</p>
+  </div>
+
+  <div class="blog-stats">
+    <div class="bs-item"><span>1</span>PUBLISHED</div>
+    <div class="bs-item"><span>5</span>COMING SOON</div>
+    <div class="bs-item"><span>CTF · WEB · LINUX · NETWORK · RED TEAM</span>TOPICS</div>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">ALL</button>
+    <button class="filter-btn" data-filter="ctf">CTF</button>
+    <button class="filter-btn" data-filter="web">WEB</button>
+    <button class="filter-btn" data-filter="linux">LINUX</button>
+    <button class="filter-btn" data-filter="network">NETWORK</button>
+    <button class="filter-btn" data-filter="red">RED TEAM</button>
+  </div>
+
+  <div class="blog-grid" id="postsGrid">
+
+    <!-- LIVE -->
+    <a href="geoguesser-ctf.html" class="post-card" data-cat="ctf">
+      <div class="post-thumb">
+        <div class="post-thumb-grid"></div>
+        <div class="post-thumb-label">CTF</div>
+        <span class="post-cat cat-ctf">CTF WRITE-UP</span>
+        <span class="post-status status-pub">PUBLISHED</span>
+      </div>
+      <div class="post-body">
+        <div class="post-meta">FEB 2025 · 8 MIN READ</div>
+        <div class="post-title">GeoGuesser CTF — OSINT Geolocation Challenge Write-up</div>
+        <div class="post-excerpt">How I solved a geolocation-based CTF challenge using image analysis, metadata, and open-source intelligence techniques.</div>
+        <div class="post-footer">
+          <span class="post-readmore">READ POST →</span>
+          <span class="post-time">8 MIN</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- DRAFTS -->
+    <div class="post-card draft" data-cat="web">
+      <div class="post-thumb">
+        <div class="post-thumb-grid"></div>
+        <div class="post-thumb-label">WEB</div>
+        <span class="post-cat cat-web">WEB SECURITY</span>
+        <span class="post-status status-draft">COMING SOON</span>
+      </div>
+      <div class="post-body">
+        <div class="post-meta">COMING SOON · 8 MIN READ</div>
+        <div class="post-title">SQL Injection From Zero to Shell — A Practical Guide</div>
+        <div class="post-excerpt">Basic payloads to blind SQLi, time-based attacks, and escalating to OS command execution.</div>
+        <div class="post-footer"><span class="post-readmore" style="color:var(--muted);">DRAFT</span><span class="post-time">8 MIN</span></div>
+      </div>
+    </div>
+
+    <div class="post-card draft" data-cat="linux">
+      <div class="post-thumb">
+        <div class="post-thumb-grid"></div>
+        <div class="post-thumb-label">LINUX</div>
+        <span class="post-cat cat-linux">LINUX</span>
+        <span class="post-status status-draft">COMING SOON</span>
+      </div>
+      <div class="post-body">
+        <div class="post-meta">COMING SOON · 10 MIN READ</div>
+        <div class="post-title">Linux Privilege Escalation — Common Paths & Techniques</div>
+        <div class="post-excerpt">SUID, cron jobs, writable paths, sudo misconfigs — hands-on privesc vector walkthrough.</div>
+        <div class="post-footer"><span class="post-readmore" style="color:var(--muted);">DRAFT</span><span class="post-time">10 MIN</span></div>
+      </div>
+    </div>
+
+    <div class="post-card draft" data-cat="network">
+      <div class="post-thumb">
+        <div class="post-thumb-grid"></div>
+        <div class="post-thumb-label">NET</div>
+        <span class="post-cat cat-net">NETWORKING</span>
+        <span class="post-status status-draft">COMING SOON</span>
+      </div>
+      <div class="post-body">
+        <div class="post-meta">COMING SOON · 6 MIN READ</div>
+        <div class="post-title">How DNS Works — And How Attackers Abuse It</div>
+        <div class="post-excerpt">DNS resolution, zone transfers, hijacking, subdomain takeovers, and detection strategies.</div>
+        <div class="post-footer"><span class="post-readmore" style="color:var(--muted);">DRAFT</span><span class="post-time">6 MIN</span></div>
+      </div>
+    </div>
+
+    <div class="post-card draft" data-cat="red">
+      <div class="post-thumb">
+        <div class="post-thumb-grid"></div>
+        <div class="post-thumb-label">AD</div>
+        <span class="post-cat cat-win">WINDOWS / AD</span>
+        <span class="post-status status-draft">COMING SOON</span>
+      </div>
+      <div class="post-body">
+        <div class="post-meta">COMING SOON · 7 MIN READ</div>
+        <div class="post-title">Active Directory Attacks — Kerberoasting & AS-REP Roasting</div>
+        <div class="post-excerpt">How Kerberoasting and AS-REP roasting work and how to detect them in enterprise environments.</div>
+        <div class="post-footer"><span class="post-readmore" style="color:var(--muted);">DRAFT</span><span class="post-time">7 MIN</span></div>
+      </div>
+    </div>
+
+    <div class="post-card draft" data-cat="red">
+      <div class="post-thumb">
+        <div class="post-thumb-grid"></div>
+        <div class="post-thumb-label">LAB</div>
+        <span class="post-cat cat-red">RED TEAM</span>
+        <span class="post-status status-draft">COMING SOON</span>
+      </div>
+      <div class="post-body">
+        <div class="post-meta">COMING SOON · 9 MIN READ</div>
+        <div class="post-title">Building a Home Lab for Red Team Practice</div>
+        <div class="post-excerpt">Full attack/defend lab at home — VMs, network segmentation, vulnerable targets, C2 infra on a budget.</div>
+        <div class="post-footer"><span class="post-readmore" style="color:var(--muted);">DRAFT</span><span class="post-time">9 MIN</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">VRUNSEC</div>
+  <div class="footer-text">© 2025 VARUN SINGH CHAUHAN · <a href="../index.html">← BACK TO PORTFOLIO</a></div>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    cursor.style.transform=`translate(${mx-5}px,${my-5}px)`;
+  });
+  (function animRing(){
+    rx+=(mx-rx-18)*0.15; ry+=(my-ry-18)*0.15;
+    ring.style.transform=`translate(${rx}px,${ry}px)`;
+    requestAnimationFrame(animRing);
+  })();
+
+  window.addEventListener('scroll',()=>{
+    const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+    document.getElementById('scrollLine').style.width=p+'%';
+  });
+
+  // Filter
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      document.querySelectorAll('.post-card').forEach(card => {
+        card.style.display = (f === 'all' || card.dataset.cat === f) ? 'block' : 'none';
+      });
+    });
+  });
+
+  // Fade in
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e,i) => {
+      if(e.isIntersecting){
+        setTimeout(()=>{ e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; }, i*80);
+        obs.unobserve(e.target);
+      }
+    });
+  },{threshold:0.08});
+  document.querySelectorAll('.post-card').forEach(el => {
+    el.style.opacity='0'; el.style.transform='translateY(24px)';
+    el.style.transition='opacity 0.5s ease,transform 0.5s ease,border-color 0.3s,box-shadow 0.3s,transform 0.3s';
+    obs.observe(el);
+  });
+</script>
+</body>
+</html>
